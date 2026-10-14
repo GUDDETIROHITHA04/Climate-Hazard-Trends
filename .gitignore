@@ -1,0 +1,15 @@
+# dependencies and builds
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+# local config and secrets
+.env
+.env.local
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
