@@ -1,16 +1,21 @@
+import logging
+
 from app.core.config import Settings
+
+logger = logging.getLogger(__name__)
 
 
 def create_database(settings: Settings):
-    """Real MongoDB when MONGODB_URI is set; in-memory mongomock for local development only."""
+    """Use MongoDB when configured, otherwise use a process-local in-memory mock."""
     if settings.mongodb_uri:
         from pymongo import MongoClient
 
         return MongoClient(settings.mongodb_uri, serverSelectionTimeoutMS=5000)[settings.mongodb_db]
-    if settings.is_production:
-        raise RuntimeError("MONGODB_URI is required when APP_ENV=production")
-    try:
-        import mongomock
-    except ImportError as exc:  # pragma: no cover
-        raise RuntimeError("Set MONGODB_URI or install requirements-dev.txt for the in-memory dev database") from exc
+
+    import mongomock
+
+    logger.warning(
+        "MONGODB_URI is not configured; using an in-memory database. "
+        "Data is temporary and will be lost when this process restarts."
+    )
     return mongomock.MongoClient()[settings.mongodb_db]

@@ -118,11 +118,13 @@ These tests check the API using sample data and fake external services.
 
 ## Deployment
 
-* **Database:** MongoDB Atlas
+* **Database:** MongoDB Atlas (recommended for persistent data)
 * **Backend:** Render
 * **Frontend:** Vercel or Netlify
 
-Configure the required environment variables before deploying the application.
+For a temporary deployment without MongoDB, leave `MONGODB_URI` unset in Render. The backend then uses `mongomock`, an in-memory database, just as it does locally. This is not durable storage: stored data is lost whenever Render restarts or replaces the backend process. `mongomock` is included in the production requirements for this temporary mode. Set `MONGODB_URI` to a real MongoDB connection string when persistent data is needed.
+
+Configure the frontend's `VITE_API_URL` and the backend's `CORS_ORIGINS` for the deployed URLs before deploying.
 
 ## Limitations
 
